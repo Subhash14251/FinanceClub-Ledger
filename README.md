@@ -29,3 +29,5 @@ edited or deleted.
 - An expense larger than the current balance
 
 
+Subash-Wrote and deployed the Solidity contract in Remix: admin/treasurer roles, income, expense and correction functions, and the rules that reject unauthorised or invalid entries. Tested the refusals with a non-treasurer wallet
+Sairup- Built the frontend: ledger view, wallet connect and role detection, entry and correction forms, friendly error messages and CSV export. Hosted the demo
