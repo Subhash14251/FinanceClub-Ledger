@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finance Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#14213d;--paper:#f6f8fb;--card:#fff;--line:#d6dde6;--muted:#5b6778;--in:#17734f;--out:#b3372f;--fix:#9a6700;--fixbg:#fff6df}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.5 "Public Sans",system-ui,sans-serif}
+h1,h2,.big{font-family:Newsreader,Georgia,serif;font-weight:700;margin:0}
+h2{font-size:1.4rem;margin-bottom:.25rem}
+.wrap{max-width:1040px;margin:0 auto;padding:1rem 1.25rem 4rem}
+header{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;padding:1rem 0 1.25rem;border-bottom:2px solid var(--ink)}
+h1{font-size:2rem;letter-spacing:.04em}
+.brand{display:flex;align-items:center;gap:.75rem}
+.logo{width:52px;height:52px;flex:none}
+.sub{color:var(--muted);margin:.1rem 0 0}
+button{font:600 .95rem "Public Sans",sans-serif;background:var(--ink);color:#fff;border:0;border-radius:6px;padding:.6rem 1rem;cursor:pointer}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+button:disabled{opacity:.5;cursor:wait}
+:focus-visible{outline:3px solid #3b82f6;outline-offset:2px}
+.chip{display:inline-block;padding:.15rem .6rem;border-radius:99px;background:#e6ebf2;font-size:.85rem;font-weight:500}
+.hero{display:grid;grid-template-columns:1.4fr 1fr;gap:1.5rem;padding:1.75rem 0;align-items:end}
+.big{font-size:clamp(3rem,9vw,5.5rem);line-height:1;font-variant-numeric:tabular-nums}
+.label{color:var(--muted);font-size:.9rem}
+.stats{display:grid;gap:.75rem}
+.stats div{border-left:4px solid var(--line);padding-left:.75rem}
+.stats .in{border-color:var(--in)}.stats .out{border-color:var(--out)}
+.stats b{font-size:1.4rem;font-variant-numeric:tabular-nums}
+section{margin-top:2rem}
+.bar{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:space-between;align-items:end;margin-bottom:.75rem}
+.scroll{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:8px}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{padding:.65rem .8rem;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.85rem;color:var(--muted);font-weight:600;background:#eef2f7}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tr.fixed td:first-child{box-shadow:inset 4px 0 var(--fix);background:var(--fixbg)}
+tr.fixrow td{background:#fffbf0}
+.plus{color:var(--in);font-weight:600}.minus{color:var(--out);font-weight:600}
+.tag{font-size:.8rem;font-weight:600;padding:.1rem .5rem;border-radius:4px;background:#e6ebf2}
+.tag.Correction{background:var(--fixbg);color:var(--fix)}
+.note{color:var(--fix);font-size:.85rem}
+.empty{padding:2rem;text-align:center;color:var(--muted)}
+.cats{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}
+.cats span{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:.3rem .65rem;font-size:.9rem}
+.forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+form{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:1rem;display:grid;gap:.6rem;align-content:start}
+form h3{margin:0;font:700 1.1rem Newsreader,Georgia,serif}
+label{font-size:.85rem;color:var(--muted);display:grid;gap:.2rem}
+input,select{font:inherit;padding:.5rem;border:1px solid #9aa6b6;border-radius:6px;width:100%;background:#fff;color:var(--ink)}
+#status{margin:1rem 0;padding:.75rem 1rem;border-radius:8px;display:none}
+#status.show{display:block}
+#status.info{background:#e8f0fe}#status.ok{background:#e3f4ec;color:#0f5a3c}#status.err{background:#fde8e6;color:#8f2520}
+#setup{display:none;background:var(--fixbg);border:1px solid var(--fix);padding:1rem;border-radius:8px;margin-top:1rem}
+.hidden{display:none!important}
+@media(max-width:700px){.hero{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:no-preference){button{transition:opacity .15s}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 48 48" role="img" aria-label="Finance Club logo">
+        <rect width="48" height="48" rx="10" fill="#14213d"/>
+        <g stroke-linecap="round">
+          <line x1="14" y1="10" x2="14" y2="38" stroke="#5fd3a3" stroke-width="2"/><rect x="10.5" y="19" width="7" height="12" rx="1.5" fill="#5fd3a3"/>
+          <line x1="24" y1="14" x2="24" y2="42" stroke="#ff8b82" stroke-width="2"/><rect x="20.5" y="23" width="7" height="12" rx="1.5" fill="#ff8b82"/>
+          <line x1="34" y1="8" x2="34" y2="34" stroke="#5fd3a3" stroke-width="2"/><rect x="30.5" y="12" width="7" height="15" rx="1.5" fill="#5fd3a3"/>
+        </g>
+        <polyline points="7,35 17,27 25,31 40,12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="32,11 40,12 39,20" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h1>FINANCE CLUB</h1>
+    </div>
+    <p class="sub">Every rupee in and out, recorded on Base Sepolia. Nothing is edited or deleted; mistakes are fixed with a correction.</p>
+  </div>
+  <div>
+    <span id="who" class="chip">Viewing as the public</span>
+    <button id="connect">Connect wallet</button>
+  </div>
+</header>
+
+<div id="setup"><b>Set the contract address.</b> Open <code>index.html</code>, find <code>CONTRACT_ADDRESS</code> near the top of the script, and paste the address you got when you deployed the contract in Remix.</div>
+
+<div class="hero">
+  <div>
+    <div class="label">Current balance (fake units)</div>
+    <div class="big" id="balance">…</div>
+  </div>
+  <div class="stats">
+    <div class="in"><span class="label">Money in</span><br><b id="tin">…</b></div>
+    <div class="out"><span class="label">Money out</span><br><b id="tout">…</b></div>
+  </div>
+</div>
+
+<section>
+  <div class="bar">
+    <div><h2>Ledger</h2><span class="label" id="count"></span></div>
+    <div><button class="ghost" id="refresh">Refresh</button> <button class="ghost" id="csv">Download CSV</button></div>
+  </div>
+  <div class="scroll"><table>
+    <thead><tr><th>#</th><th>Date</th><th>Type</th><th>Category</th><th>Details</th><th>Recorded by</th><th class="num">Amount</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+  <div class="cats" id="cats"></div>
+</section>
+
+<div id="status" role="status" aria-live="polite"></div>
+
+<section id="treasurer" class="hidden">
+  <h2>Record an entry</h2>
+  <p class="sub" style="margin-bottom:.75rem">Only wallets approved by the admin can record entries. The contract checks this, not this page.</p>
+  <div class="forms">
+    <form id="fIncome"><h3>Money in</h3>
+      <label>Amount<input name="amount" type="number" min="0" step="1" required placeholder="5000"></label>
+      <label>Category<input name="category" required placeholder="Sponsorship"></label>
+      <label>Details<input name="desc" required placeholder="Fake sponsor, annual fest"></label>
+      <button>Record income</button></form>
+    <form id="fExpense"><h3>Money out</h3>
+      <label>Amount<input name="amount" type="number" min="0" step="1" required placeholder="1200"></label>
+      <label>Category<input name="category" required placeholder="Printing"></label>
+      <label>Details<input name="desc" required placeholder="Posters, 500 units"></label>
+      <button>Record expense</button></form>
+    <form id="fCorrection"><h3>Correct an earlier entry</h3>
+      <label>Entry number to correct<input name="orig" type="number" min="1" step="1" required placeholder="2"></label>
+      <label>Adjustment amount<input name="amount" type="number" min="0" step="1" required placeholder="200"></label>
+      <label>Direction<select name="dir"><option value="1">Adds to balance</option><option value="0">Subtracts from balance</option></select></label>
+      <label>Reason<input name="reason" required placeholder="Printing was 1000, not 1200"></label>
+      <button>Post correction</button></form>
+  </div>
+</section>
+
+<section id="admin" class="hidden">
+  <h2>Admin: who can record entries</h2>
+  <div class="forms">
+    <form id="fAdd"><h3>Approve a treasurer</h3>
+      <label>Wallet address<input name="addr" required placeholder="0x…"></label>
+      <button>Approve wallet</button></form>
+    <form id="fRemove"><h3>Remove a treasurer</h3>
+      <label>Wallet address<input name="addr" required placeholder="0x…"></label>
+      <button>Remove wallet</button></form>
+  </div>
+</section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
+<script>
+// ====== CONFIG: paste your deployed contract address here ======
+const CONTRACT_ADDRESS = "0xE266d38eEa87572de8066e6168FB72e5b1B91e46";
+// ================================================================
+const RPC = "https://sepolia.base.org", CHAIN_ID = 84532, EXPLORER = "https://sepolia.basescan.org";
+const ABI = [
+  "function admin() view returns (address)",
+  "function isTreasurer(address) view returns (bool)",
+  "function balance() view returns (int256)",
+  "function entryCount() view returns (uint256)",
+  "function getEntry(uint256 id) view returns (tuple(uint256 id, uint8 entryType, uint256 amount, string category, string description, address recordedBy, uint256 timestamp, uint256 correctsId, bool correctionIsIncome))",
+  "function addTreasurer(address who)",
+  "function removeTreasurer(address who)",
+  "function recordIncome(uint256 amount, string category, string description)",
+  "function recordExpense(uint256 amount, string category, string description)",
+  "function recordCorrection(uint256 originalId, uint256 amount, bool addsToBalance, string reason)"
+];
+const ADMIN_NAME = "Aditya"; // shown instead of the wallet address when the admin connects
+const TYPES = ["Income", "Expense", "Correction"];
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const short = a => a.slice(0, 6) + "…" + a.slice(-4);
+const fmt = n => Number(n).toLocaleString("en-IN");
+
+let entries = [], readC = null, writeC = null, account = null;
+const configured = ethers.isAddress(CONTRACT_ADDRESS);
+if (!configured) { $("setup").style.display = "block"; }
+else { readC = new ethers.Contract(CONTRACT_ADDRESS, ABI, new ethers.JsonRpcProvider(RPC)); }
+
+function effect(e) { return e.type === 0 ? e.amount : e.type === 1 ? -e.amount : (e.up ? e.amount : -e.amount); }
+
+async function load() {
+  if (!configured) return;
+  try {
+    const n = Number(await readC.entryCount());
+    const raw = await Promise.all(Array.from({ length: n }, (_, i) => readC.getEntry(i + 1)));
+    entries = raw.map(r => ({ id: Number(r.id), type: Number(r.entryType), amount: Number(r.amount), cat: r.category,
+      desc: r.description, by: r.recordedBy, ts: Number(r.timestamp), fixes: Number(r.correctsId), up: r.correctionIsIncome }));
+    $("balance").textContent = fmt(await readC.balance());
+    render();
+  } catch (e) {
+    $("balance").textContent = "—";
+    say("err", "Couldn't read the ledger. Check your internet connection and that the contract address is on Base Sepolia.");
+  }
+}
+
+function render() {
+  const fixedBy = {};
+  entries.forEach(e => { if (e.type === 2) (fixedBy[e.fixes] = fixedBy[e.fixes] || []).push(e.id); });
+  let tin = 0, tout = 0; const cats = {};
+  entries.forEach(e => {
+    const v = effect(e); v > 0 ? tin += v : tout -= v;
+    if (e.type < 2) cats[e.cat] = (cats[e.cat] || 0) + v;
+  });
+  $("tin").textContent = fmt(tin); $("tout").textContent = fmt(tout);
+  $("count").textContent = entries.length + (entries.length === 1 ? " entry" : " entries");
+  $("rows").innerHTML = entries.length ? entries.slice().reverse().map(e => {
+    const v = effect(e), t = TYPES[e.type];
+    const note = e.type === 2 ? `<div class="note">Corrects entry #${e.fixes}</div>`
+      : fixedBy[e.id] ? `<div class="note">Corrected by #${fixedBy[e.id].join(", #")}</div>` : "";
+    return `<tr class="${fixedBy[e.id] ? "fixed" : ""}"><td>${e.id}</td><td>${new Date(e.ts * 1000).toLocaleString()}</td>
+      <td><span class="tag ${t}">${t}</span></td><td>${esc(e.cat)}</td><td>${esc(e.desc)}${note}</td>
+      <td title="${e.by}">${short(e.by)}</td><td class="num ${v > 0 ? "plus" : "minus"}">${v > 0 ? "+" : "−"}${fmt(Math.abs(v))}</td></tr>`;
+  }).join("") : `<tr><td colspan="7" class="empty">No entries yet. Once a treasurer records money in or out, it appears here.</td></tr>`;
+  $("cats").innerHTML = Object.entries(cats).map(([k, v]) => `<span>${esc(k)}: <b class="${v >= 0 ? "plus" : "minus"}">${v >= 0 ? "+" : "−"}${fmt(Math.abs(v))}</b></span>`).join("");
+}
+
+function say(kind, html) { const s = $("status"); s.className = "show " + kind; s.innerHTML = html; }
+
+function friendly(e) {
+  const m = [e.reason, e.shortMessage, e.message, e?.info?.error?.message, e?.error?.message].filter(Boolean).join(" ");
+  if (e.code === "ACTION_REJECTED" || /user rejected|denied/i.test(m)) return "You cancelled the request in your wallet. Nothing was recorded.";
+  if (/Only the admin/i.test(m)) return "Refused by the contract: only the club admin can change who is a treasurer, and this wallet isn't the admin.";
+  if (/not an authorized treasurer/i.test(m)) return "Refused by the contract: this wallet isn't an authorized treasurer, so it can't record entries.";
+  if (/greater than zero/i.test(m)) return "Refused by the contract: the amount must be more than zero.";
+  if (/exceeds current balance/i.test(m)) return "Refused by the contract: that would take the balance below zero.";
+  if (/Original entry does not exist/i.test(m)) return "Refused by the contract: there is no entry with that number to correct.";
+  if (/insufficient funds/i.test(m)) return "This wallet has no test ETH to pay the network fee. Get some from a Base Sepolia faucet.";
+  return "Something went wrong. Make sure your wallet is on Base Sepolia and try again.";
+}
+
+async function ensureNetwork() {
+  const hex = "0x" + CHAIN_ID.toString(16);
+  try { await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: hex }] }); }
+  catch (e) {
+    if (e.code !== 4902 && !/Unrecognized chain/i.test(e.message || "")) throw e;
+    await window.ethereum.request({ method: "wallet_addEthereumChain", params: [{ chainId: hex, chainName: "Base Sepolia",
+      nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 }, rpcUrls: [RPC], blockExplorerUrls: [EXPLORER] }] });
+  }
+}
+
+async function connect() {
+  if (!configured) return say("err", "Set CONTRACT_ADDRESS in index.html first.");
+  if (!window.ethereum) return say("err", "No wallet found. Install MetaMask, then reload this page.");
+  try {
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+    await ensureNetwork();
+    const signer = await new ethers.BrowserProvider(window.ethereum).getSigner();
+    account = await signer.getAddress();
+    writeC = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+    const isAdmin = (await readC.admin()).toLowerCase() === account.toLowerCase();
+    const isT = await readC.isTreasurer(account);
+    $("who").textContent = isAdmin ? ADMIN_NAME + " · Admin" : short(account) + " · " + (isT ? "Treasurer" : "Not authorized");
+    $("who").title = account;
+    $("connect").textContent = "Connected";
+    $("connect").disabled = true;
+    $("treasurer").classList.remove("hidden");
+    $("admin").classList.remove("hidden");
+    say("info", isAdmin || isT ? "Wallet connected." : "Wallet connected. This wallet is not authorized, so the contract will refuse any entry it tries to record.");
+  } catch (e) { say("err", friendly(e)); }
+}
+
+async function send(form, call) {
+  if (!writeC) return say("err", "Connect your wallet first.");
+  const btn = form.querySelector("button"); btn.disabled = true;
+  try {
+    say("info", "Confirm the transaction in your wallet…");
+    const tx = await call();
+    say("info", "Sent. Waiting for the network to confirm…");
+    await tx.wait();
+    say("ok", `Recorded. <a href="${EXPLORER}/tx/${tx.hash}" target="_blank" rel="noopener">View on BaseScan</a>`);
+    form.reset();
+    await load();
+  } catch (e) { say("err", friendly(e)); }
+  btn.disabled = false;
+}
+const val = (f, n) => f.elements[n].value.trim();
+const bind = (id, fn) => $(id).addEventListener("submit", ev => { ev.preventDefault(); send(ev.target, () => fn(ev.target)); });
+
+bind("fIncome", f => writeC.recordIncome(BigInt(val(f, "amount") || 0), val(f, "category"), val(f, "desc")));
+bind("fExpense", f => writeC.recordExpense(BigInt(val(f, "amount") || 0), val(f, "category"), val(f, "desc")));
+bind("fCorrection", f => writeC.recordCorrection(BigInt(val(f, "orig") || 0), BigInt(val(f, "amount") || 0), val(f, "dir") === "1", val(f, "reason")));
+bind("fAdd", f => { if (!ethers.isAddress(val(f, "addr"))) throw new Error("bad"); return writeC.addTreasurer(val(f, "addr")); });
+bind("fRemove", f => { if (!ethers.isAddress(val(f, "addr"))) throw new Error("bad"); return writeC.removeTreasurer(val(f, "addr")); });
+
+$("connect").onclick = connect;
+$("refresh").onclick = load;
+$("csv").onclick = () => {
+  const q = s => '"' + String(s).replace(/"/g, '""') + '"';
+  const rows = [["id", "date", "type", "category", "details", "recorded_by", "corrects", "amount"]].concat(entries.map(e =>
+    [e.id, new Date(e.ts * 1000).toISOString(), TYPES[e.type], e.cat, e.desc, e.by, e.fixes || "", effect(e)]));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([rows.map(r => r.map(q).join(",")).join("\n")], { type: "text/csv" }));
+  a.download = "club-ledger.csv"; a.click();
+};
+if (window.ethereum) { window.ethereum.on("accountsChanged", () => location.reload()); window.ethereum.on("chainChanged", () => location.reload()); }
+load();
+</script>
+</body>
+</html>
